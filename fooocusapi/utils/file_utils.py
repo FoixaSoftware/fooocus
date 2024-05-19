@@ -49,7 +49,7 @@ def save_output_file(
     filename = os.path.join(date_string, image_name + '.' + extension)
     file_path = os.path.join(output_dir, filename)
 
-    if extension not in ['png', 'jpg', 'webp']:
+    if extension not in ['png', 'jpeg', 'webp']:
         extension = 'png'
 
     if image_meta is None:
