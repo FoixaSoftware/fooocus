@@ -116,7 +116,7 @@ def prepare_environments(args) -> bool:
         default.get_aspect_ratio_value(a) for a in config.available_aspect_ratios
     ]
 
-    #download_models()
+    download_models()
 
     # Init task queue
     from fooocusapi import worker
@@ -166,11 +166,7 @@ def pre_setup():
     arguments = Args()
     sys.argv = [sys.argv[0]]
     sys.argv.append("--disable-image-log")
-    sys.argv.append("--skip-pip")
-    sys.argv.append("--disable-in-browser")
-    sys.argv.append("--always-high-vram")
-    sys.argv.append("--disable-offload-from-vram")
-    #install_dependents(arguments.skip_pip)
+    install_dependents(arguments.skip_pip)
 
     prepare_environments(arguments)
 
