@@ -19,7 +19,11 @@ from PIL import Image
 from PIL.PngImagePlugin import PngInfo
 
 from fooocusapi.utils.logger import logger
+from supabase import create_client, Client
 
+url: str = os.environ.get("SUPABASE_URL")
+key: str = os.environ.get("SUPABASE_KEY")
+supabase: Client = create_client(url, key)
 
 output_dir = os.path.abspath(os.path.join(
     os.path.dirname(__file__), '../..', 'outputs', 'files'))
@@ -126,6 +130,28 @@ def output_file_to_bytesimg(filename: str | None) -> bytes | None:
     byte_data = output_buffer.getvalue()
     return byte_data
 
+def upload_to_storage(filename: str | None, transaction_id: str | None, user_id: str | None) -> str | None:
+    """
+    Convert an image file to a bytes string.
+    Args:
+        filename: str of file name
+    return: bytes of image data
+    """
+    if filename is None:
+        return None
+    if transaction_id is None:
+        return None
+    if user_id is None:
+        return None
+    
+    file_path = os.path.join(output_dir, filename)
+    if not os.path.exists(file_path) or not os.path.isfile(file_path):
+        return None
+
+    bucket_name = os.environ.get("SUPABASE_BUCKET_NAME")
+    bucket_path = f"{user_id}/{transaction_id}/{filename}"
+    supabase.storage.from_(bucket_name).upload(file=file_path, path=bucket_path, file_options={"content-type": "image/jpeg"})
+    return supabase.storage.from_(bucket_name).get_public_url(bucket_path)
 
 def get_file_serve_url(filename: str | None) -> str | None:
     """

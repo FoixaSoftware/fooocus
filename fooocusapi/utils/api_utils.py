@@ -14,7 +14,8 @@ from fooocusapi.utils.img_utils import read_input_image
 from fooocusapi.utils.file_utils import (
     get_file_serve_url,
     output_file_to_base64img,
-    output_file_to_bytesimg
+    output_file_to_bytesimg,
+    upload_to_storage
 )
 from fooocusapi.utils.logger import logger
 from fooocusapi.models.common.requests import (
@@ -50,7 +51,6 @@ from fooocusapi.configs.default import (
 
 from fooocusapi.parameters import ImageGenerationParams
 from fooocusapi.task_queue import QueueTask
-
 
 api_key_header = APIKeyHeader(name="X-API-KEY", auto_error=False)
 
@@ -209,6 +209,8 @@ def req_to_params(req: Text2ImgRequest) -> ImageGenerationParams:
         save_name=req.save_name,
         save_extension=req.save_extension,
         require_base64=req.require_base64,
+        transaction_id=req.transaction_id,
+        user_id=req.user_id,
     )
 
 
@@ -234,7 +236,7 @@ def generate_async_output(
             job_stage = AsyncJobStage.error
         elif task.task_result is not None:
             job_stage = AsyncJobStage.success
-            job_result = generate_image_result_output(task.task_result, task.req_param.require_base64)
+            job_result = generate_image_result_output(task.task_result, task.req_param.require_base64, task.req_param.transaction_id, task.req_param.user_id)
 
     result = AsyncJobResponse(
         job_id=task.job_id,
@@ -271,7 +273,9 @@ def generate_streaming_output(results: List[ImageGenerationResult]) -> Response:
 
 def generate_image_result_output(
         results: List[ImageGenerationResult],
-        require_base64: bool) -> List[GeneratedImageResult]:
+        require_base64: bool,
+        transaction_id: str = None,
+        user_id: str = None) -> List[GeneratedImageResult]:
     """
     Generate image result output
     Arguments:
@@ -285,7 +289,8 @@ def generate_image_result_output(
             base64=output_file_to_base64img(item.im) if require_base64 else None,
             url=get_file_serve_url(item.im),
             seed=str(item.seed),
-            finish_reason=item.finish_reason
+            finish_reason=item.finish_reason,
+            storage_url = upload_to_storage(item.im, transaction_id, user_id)
             ) for item in results
         ]
     return results

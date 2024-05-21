@@ -94,4 +94,4 @@ def call_worker(req: Text2ImgRequest, accept: str) -> Response | AsyncJobRespons
 
     if streaming_output:
         return generate_streaming_output(results)
-    return generate_image_result_output(results, req.require_base64)
+    return generate_image_result_output(results, req.require_base64, req.transaction_id, req.user_id)

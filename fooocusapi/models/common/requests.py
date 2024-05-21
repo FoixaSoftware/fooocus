@@ -100,6 +100,8 @@ class CommonRequest(BaseModel):
     async_process: bool = Field(default=False, description="Set to true will run async and return job info for retrieve generation result later")
     webhook_url: str | None = Field(default='', description="Optional URL for a webhook callback. If provided, the system will send a POST request to this URL upon task completion or failure."
                                                             " This allows for asynchronous notification of task status.")
+    user_id: str | None = Field(default=None, description="Supabase user_id")
+    transaction_id: str | None = Field(default=None, description="Supabase transaction_id")
 
 
 def advanced_params_parser(advanced_params: str | None) -> AdvancedParams:

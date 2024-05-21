@@ -80,6 +80,8 @@ class ImgUpscaleOrVaryRequest(CommonRequest):
             read_wildcards_in_order: bool = Form(default=False, description="Read wildcards in order"),
             async_process: bool = Form(default=False, description="Set to true will run async and return job info for retrieve generation result later"),
             webhook_url: str = Form(default="", description="Webhook url for generation result"),
+            user_id: str | None = Form(default=None, description="Supabase user_id"),
+            transaction_id: str | None = Form(default=None, description="Supabase transaction_id")
     ):
         style_selection_arr = style_selection_parser(style_selections)
         loras_model = lora_parser(loras)
@@ -92,7 +94,7 @@ class ImgUpscaleOrVaryRequest(CommonRequest):
             image_number=image_number, image_seed=image_seed, sharpness=sharpness, guidance_scale=guidance_scale,
             base_model_name=base_model_name, refiner_model_name=refiner_model_name, refiner_switch=refiner_switch,
             loras=loras_model, advanced_params=advanced_params_obj, save_meta=save_meta, meta_scheme=meta_scheme,
-            save_extension=save_extension, save_name=save_name, require_base64=require_base64,
+            save_extension=save_extension, save_name=save_name, require_base64=require_base64, user_id=user_id, transaction_id=transaction_id,
             read_wildcards_in_order=read_wildcards_in_order, async_process=async_process, webhook_url=webhook_url)
 
 
@@ -142,6 +144,8 @@ class ImgInpaintOrOutpaintRequest(CommonRequest):
             read_wildcards_in_order: bool = Form(default=False, description="Read wildcards in order"),
             async_process: bool = Form(default=False, description="Set to true will run async and return job info for retrieve generation result later"),
             webhook_url: str = Form(default="", description="Webhook url for generation result"),
+            user_id: str | None = Form(default=None, description="Supabase user_id"),
+            transaction_id: str | None = Form(default=None, description="Supabase transaction_id")
     ):
         if isinstance(input_mask, File):
             input_mask = None
@@ -160,7 +164,7 @@ class ImgInpaintOrOutpaintRequest(CommonRequest):
             image_number=image_number, image_seed=image_seed, sharpness=sharpness, guidance_scale=guidance_scale,
             base_model_name=base_model_name, refiner_model_name=refiner_model_name, refiner_switch=refiner_switch,
             loras=loras_model, advanced_params=advanced_params_obj, save_meta=save_meta, meta_scheme=meta_scheme,
-            save_extension=save_extension, save_name=save_name, require_base64=require_base64,
+            save_extension=save_extension, save_name=save_name, require_base64=require_base64, user_id=user_id, transaction_id=transaction_id,
             read_wildcards_in_order=read_wildcards_in_order, async_process=async_process, webhook_url=webhook_url)
 
 
@@ -236,6 +240,8 @@ class ImgPromptRequest(ImgInpaintOrOutpaintRequest):
             read_wildcards_in_order: bool = Form(default=False, description="Read wildcards in order"),
             async_process: bool = Form(default=False, description="Set to true will run async and return job info for retrieve generation result later"),
             webhook_url: str = Form(default="", description="Webhook url for generation result"),
+            user_id: str | None = Form(default=None, description="Supabase user_id"),
+            transaction_id: str | None = Form(default=None, description="Supabase transaction_id")
     ):
         if isinstance(input_image, File):
             input_image = None
@@ -270,5 +276,5 @@ class ImgPromptRequest(ImgInpaintOrOutpaintRequest):
             image_number=image_number, image_seed=image_seed, sharpness=sharpness, guidance_scale=guidance_scale,
             base_model_name=base_model_name, refiner_model_name=refiner_model_name, refiner_switch=refiner_switch,
             loras=loras_model, advanced_params=advanced_params_obj, save_meta=save_meta, meta_scheme=meta_scheme,
-            save_extension=save_extension, save_name=save_name, require_base64=require_base64,
+            save_extension=save_extension, save_name=save_name, require_base64=require_base64, user_id=user_id, transaction_id=transaction_id, 
             read_wildcards_in_order=read_wildcards_in_order, async_process=async_process, webhook_url=webhook_url)

@@ -38,6 +38,8 @@ class ImageGenerationParams:
         meta_scheme: str,
         save_name: str,
         require_base64: bool,
+        transaction_id: str,
+        user_id: str
     ):
         self.prompt = prompt
         self.negative_prompt = negative_prompt
@@ -68,6 +70,8 @@ class ImageGenerationParams:
         self.meta_scheme = meta_scheme
         self.save_name = save_name
         self.require_base64 = require_base64
+        self.transaction_id = transaction_id
+        self.user_id = user_id
         self.advanced_params = advanced_params
 
         if self.advanced_params is None:
