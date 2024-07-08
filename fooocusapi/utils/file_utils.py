@@ -55,6 +55,7 @@ def save_output_file(
 
     if extension not in ['png', 'jpeg', 'webp']:
         extension = 'png'
+    image_format = Image.registered_extensions()['.'+extension]
 
     if image_meta is None:
         image_meta = {}
@@ -68,7 +69,7 @@ def save_output_file(
     os.makedirs(os.path.dirname(file_path), exist_ok=True)
     Image.fromarray(img).save(
         file_path,
-        format=extension,
+        format=image_format,
         pnginfo=meta,
         optimize=True)
     return Path(filename).as_posix()
